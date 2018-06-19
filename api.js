@@ -22,6 +22,15 @@ api.get('/phone_book:id', (req, res) => {
   });
 })
 
+//api all
+api.get('/phone_book/contacts.json', (req, res) => {  
+db.all("SELECT * FROM phone_book ",  function(err, rows){
+      // rows.forEach( (row)=> {
+        res.json( rows );
+  });
+})
+
+
 
 // run server
 api.listen(3000, () => console.log('Listening on port 3000...'));
