@@ -10,7 +10,10 @@ db.serialize(function() {
 
 // define api object
 const express = require('express');
+const cors=require('cors');
 const api = express();
+
+api.use(cors())
 
 // define API endpoints
 
@@ -23,7 +26,7 @@ api.get('/phone_book:id', (req, res) => {
 })
 
 //api all
-api.get('/phone_book/contacts.json', (req, res) => {  
+api.get('/phone_book/contacts', (req, res) => {  
 db.all("SELECT * FROM phone_book ",  function(err, rows){
       // rows.forEach( (row)=> {
         res.json( rows );
