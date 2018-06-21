@@ -25,7 +25,7 @@ api.get('/phone_book:id', (req, res) => {
   });
 })
 
-//api all
+//api all contacts
 api.get('/phone_book/contacts', (req, res) => {  
 db.all("SELECT * FROM phone_book ",  function(err, rows){
       // rows.forEach( (row)=> {
@@ -35,20 +35,40 @@ db.all("SELECT * FROM phone_book ",  function(err, rows){
 
 //post request
 
+// const bodyParser = require('body-parser');
+// api.use(bodyParser.urlencoded({extended: false}));
+// api.use(bodyParser.json())
+
+// api.post("/phone_book/post",  (req, res) => {
+//     const firstName = req.body.first_name;
+//     const lastName = req.body.last_name;
+//     const number = req.body.number;
+//     if (firstName && lastName && number) {
+//         db.run(
+//             "INSERT INTO phone_book (first_name, last_name, number) VALUES (?, ?, ?)",
+//             firstName,
+//             lastName,
+//             number
+//         );
+//     }
+//     res.send("added");
+// });
+
+
 const bodyParser = require('body-parser');
 api.use(bodyParser.urlencoded({extended: false}));
 api.use(bodyParser.json());
- // hook up with your app
+
 api.post('/phone_book/post', (req, res) => {
   console.log(req.body);
 
   db.run(
-    'INSERT INTO users_to_pets VALUES ($first_name, $last_name, $number)',
+    'INSERT INTO phone_book(first_name,last_name,number) VALUES (?,?,?)',
     // parameters to SQL query:
     {
-      $first_name: req.body.name,
-      $last_name: req.body.job,
-      $number: req.body.pet,
+      firstName: req.body.first_name,
+      lastName: req.body.last_name,
+      phoneNumber: req.body.number,
     },
     // callback function to run when the query finishes:
     (err) => {
@@ -61,6 +81,19 @@ api.post('/phone_book/post', (req, res) => {
   );
 });
 
+//delete request
+
+api.delete('/api/delete_contact:id', function (req, res) {
+    const id = req.params['id'];
+    db.run("DELETE FROM phone_book WHERE id=?", id, function (err) {
+    (err) => {
+      if (err) {
+        res.send({message: 'error'});
+      } else {
+        res.send({message: 'success'});
+      }
+  }}
+)})
 
 
 
