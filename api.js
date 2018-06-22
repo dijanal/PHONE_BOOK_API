@@ -33,27 +33,6 @@ db.all("SELECT * FROM phone_book ",  function(err, rows){
   });
 })
 
-//post request
-
-// const bodyParser = require('body-parser');
-// api.use(bodyParser.urlencoded({extended: false}));
-// api.use(bodyParser.json())
-
-// api.post("/phone_book/post",  (req, res) => {
-//     const firstName = req.body.first_name;
-//     const lastName = req.body.last_name;
-//     const number = req.body.number;
-//     if (firstName && lastName && number) {
-//         db.run(
-//             "INSERT INTO phone_book (first_name, last_name, number) VALUES (?, ?, ?)",
-//             firstName,
-//             lastName,
-//             number
-//         );
-//     }
-//     res.send("added");
-// });
-
 
 const bodyParser = require('body-parser');
 api.use(bodyParser.urlencoded({extended: false}));
@@ -83,7 +62,7 @@ api.post('/phone_book/post', (req, res) => {
 
 //delete request
 
-api.delete('/api/delete_contact:id', function (req, res) {
+api.delete('/phone_book/delete:id', function (req, res) {
     const id = req.params['id'];
     db.run("DELETE FROM phone_book WHERE id=?", id, function (err) {
     (err) => {
