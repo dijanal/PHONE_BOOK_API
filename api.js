@@ -15,9 +15,13 @@ const api = express();
 
 api.use(cors())
 
+const bodyParser = require('body-parser');
+api.use(bodyParser.urlencoded({extended: false}));
+api.use(bodyParser.json());
+
 // define API endpoints
 
-//api id
+//get by id
 api.get('/phone_book:id', (req, res) => {
   const id = req.params['id'];
   db.get("SELECT * FROM phone_book WHERE id=(?)", id, function(err, row){
@@ -25,7 +29,7 @@ api.get('/phone_book:id', (req, res) => {
   });
 })
 
-//api all contacts
+//get all 
 api.get('/phone_book/contacts', (req, res) => {  
 db.all("SELECT * FROM phone_book ",  function(err, rows){
       // rows.forEach( (row)=> {
@@ -34,22 +38,18 @@ db.all("SELECT * FROM phone_book ",  function(err, rows){
 })
 
 
-const bodyParser = require('body-parser');
-api.use(bodyParser.urlencoded({extended: false}));
-api.use(bodyParser.json());
 
-api.post('/phone_book/post', (req, res) => {
+//add new
+api.post('/phone_book/post', function (req, res)  {
   console.log(req.body);
+  let contact=[
+    req.body.first_name,
+    req.body.last_name,
+    req.body.number]
 
   db.run(
-    'INSERT INTO phone_book(first_name,last_name,number) VALUES (?,?,?)',
-    // parameters to SQL query:
-    {
-      firstName: req.body.first_name,
-      lastName: req.body.last_name,
-      phoneNumber: req.body.number,
-    },
-    // callback function to run when the query finishes:
+    'INSERT INTO phone_book(first_name, last_name, number) VALUES (?,?,?)',contact,
+
     (err) => {
       if (err) {
         res.send({message: 'error'});
@@ -60,7 +60,11 @@ api.post('/phone_book/post', (req, res) => {
   );
 });
 
-//delete request
+
+
+
+
+//delete 
 
 api.delete('/phone_book/delete:id', function (req, res) {
     const id = req.params['id'];
@@ -78,5 +82,7 @@ api.delete('/phone_book/delete:id', function (req, res) {
 
 // run server
 api.listen(3000, () => console.log('Listening on port 3000...'));
+
+
 
 
