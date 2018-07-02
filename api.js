@@ -66,16 +66,15 @@ api.post('/phone_book/post', function (req, res)  {
 
 //delete 
 
-api.delete('/phone_book/delete:id', function (req, res) {
-    const id = req.params['id'];
-    db.run("DELETE FROM phone_book WHERE id=?", id, function (err) {
-    (err) => {
+api.delete('/phone_book/delete', function (req, res) {
+    console.log(req.body)
+    db.run("DELETE FROM phone_book WHERE id=?", req.body.id, function (err) {
       if (err) {
         res.send({message: 'error'});
       } else {
         res.send({message: 'success'});
       }
-  }}
+  }
 )})
 
 
