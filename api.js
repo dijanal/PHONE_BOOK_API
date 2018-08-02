@@ -1,12 +1,12 @@
 // setup database
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(':memory:'); // database will be stored in RAM only
-db.serialize(function() {
-    db.run("CREATE TABLE IF NOT EXISTS phone_book (id INTEGER PRIMARY KEY autoincrement, first_name TEXT,last_name TEXT, number TEXT)");
-    db.run("INSERT INTO phone_book (first_name, last_name, number) VALUES (?, ?, ?)", "Bob", "Sinclar", "+381641234567");
-    db.run("INSERT INTO phone_book (first_name, last_name, number) VALUES (?, ?, ?)", "Alice", "Wonderland", "+38163122333");
-    db.run("INSERT INTO phone_book (first_name, last_name, number) VALUES (?, ?, ?)", "Lee", "Bruce", "+381628000111");
-});
+var db = new sqlite3.Database('contacts.db'); // database will be stored in RAM only
+// db.serialize(function() {
+//     db.run("CREATE TABLE IF NOT EXISTS phone_book (id INTEGER PRIMARY KEY autoincrement, first_name TEXT,last_name TEXT, number TEXT)");
+//     db.run("INSERT INTO phone_book (first_name, last_name, number) VALUES (?, ?, ?)", "Bob", "Sinclar", "+381641234567");
+//     db.run("INSERT INTO phone_book (first_name, last_name, number) VALUES (?, ?, ?)", "Alice", "Wonderland", "+38163122333");
+//     db.run("INSERT INTO phone_book (first_name, last_name, number) VALUES (?, ?, ?)", "Lee", "Bruce", "+381628000111");
+// });
 
 // define api object
 const express = require('express');
@@ -30,7 +30,7 @@ api.get('/phone_book:id', (req, res) => {
 })
 
 //get all 
-api.get('/phone_book/contacts', (req, res) => {  
+api.get('/phone_book/contacts', function (req, res) {  
 db.all("SELECT * FROM phone_book ",  function(err, rows){
       // rows.forEach( (row)=> {
         res.json( rows );
